@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BE_LoansApp.DataAccess;
 using BE_LoansApp.DTOs;
-using BE_LoansApp.Entities;
+using BE_LoansApp.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

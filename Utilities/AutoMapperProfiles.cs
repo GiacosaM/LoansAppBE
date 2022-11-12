@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using BE_LoansApp.DTOs;
 using BE_LoansApp.Entities;
+using BE_LoansApp.Models;
 
 namespace BE_LoansApp.Utilities
 {
@@ -18,7 +19,19 @@ namespace BE_LoansApp.Utilities
             CreateMap<Loan, LoanDTO>();
 
             CreateMap<CategoryCreationDTO, Category>();
-            CreateMap<Category, CategoryDTO>(); 
+            CreateMap<Category, CategoryDTO>();
+
+            CreateMap<ThingViewModelDTO, Thing>();
+            CreateMap<Thing, ThingViewModelDTO>();
+
+            CreateMap<CategoryViewModel, Category>();
+            CreateMap<Category, CategoryViewModel>();
+
+            CreateMap<ThingViewModel, Thing>();
+            CreateMap<Thing, ThingViewModel>();
+
+            CreateMap<ThingViewModelDTO, Category>();
+            CreateMap<Category, ThingViewModelDTO>();
         }
 
     }

@@ -1,0 +1,42 @@
+﻿@model  BE_LoansApp.Models.ThingViewModel
+
+@{
+    ViewData["Title"] = "Create Thing";
+}
+
+<h1 class="text-center"> ABM Cosas - MVC</h1>
+
+<div class="row">
+    
+    <div class="col.sm-12">
+        <div class="card border">
+            <div class="card-header">
+                <h3 class="text-center"> New Things </h3>
+            </div>
+            <div class="card-body">
+                <form asp-Controller= "Home" asp-action="Crear" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control"/>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Category" class="control-label"></label>
+                        <input asp-for="Category" class="form-control" />
+                        <span asp-validation-for="Category" class="text-danger"></span>
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Create Thing</button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div>
+    <a asp-action="Index">Volver a Lista</a>
+</div>

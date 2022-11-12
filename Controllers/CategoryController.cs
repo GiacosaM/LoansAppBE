@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BE_LoansApp.DataAccess;
 using BE_LoansApp.DTOs;
-using BE_LoansApp.Entities;
+using BE_LoansApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -38,6 +38,13 @@ namespace BE_LoansApp.Controllers
 
         public async Task<ActionResult> Post(CategoryCreationDTO categoryCreationDTO)
         {
+
+            var existe = await categorycontext.Categories.AnyAsync(x => x.Description == categoryCreationDTO.Description);
+            if (existe)
+            {
+                return BadRequest($"Ya existe una Categoria con el nombre {categoryCreationDTO.Description}");
+            }
+
             var category = mapper.Map<Category>(categoryCreationDTO);
             categorycontext.Categories.Add(category);
             await categorycontext.SaveChangesAsync();
@@ -68,7 +75,7 @@ namespace BE_LoansApp.Controllers
         [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var existe = await categorycontext.Things.AnyAsync(x => x.Id == id);
+            var existe = await categorycontext.Categories.AnyAsync(x => x.Id == id);
 
 
             if (!existe)

@@ -1,18 +1,20 @@
-﻿@{
+﻿@model IEnumerable<BE_LoansApp.Models.Thing>
+
+@{
     ViewData["Title"] = "ABM Cosas";
 }
 
 <h1 class="text-center"> ABM Cosas - MVC</h1>
-
-<div class="row">
-    <div class="col.sm-12">
-        <div class="float-right"> 
-            <a asp-action="Crear" asp-controller="Home" class="btn btn-success"> New Thing</a>
-        </div>
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>@TempData["Mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
-</div>
+}
 
 <div class="row">
+    <a asp-action="Crear" asp-controller= "Home" class="btn btn-success"> New Thing</a>
     <div class="col.sm-12">
         <div class="card border">
             <div class="card-header">
@@ -22,7 +24,31 @@
                 <div  class="table-responsive">
                     @if (Model.Count() > 0) { 
                         <table class="table table-bordered" width="100%" cellspacing="0">
-
+                            <thead>
+                                <tr>
+                                    <th> @Html.DisplayNameFor(m => m.Id) </th>
+                                    <th> @Html.DisplayNameFor(m => m.Description) </th>
+                                    <th> @Html.DisplayNameFor(m => m.Category) </th>
+                                    <th> @Html.DisplayNameFor(m => m.Id) </th>
+                                                    
+                                    <th> Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach(var things in Model){
+                                    <tr>
+                                        <td> @Html.DisplayFor(m => things.Id) </td>
+                                        <td> @Html.DisplayFor(m => things.Description) </td>
+                                        <td> @Html.DisplayFor(m => things.Category.Description) </td>
+                                        <td> @Html.DisplayFor(m => things.Category.Id) </td>
+                                                                 
+                                        <td>
+                                            <a class="btn btn-primary" asp-action="Editar" asp-route-id="@things.Id" > Editar</a>
+                                            <a class="btn btn-danger" asp-action="Borrar" asp-route-id="@things.Id"> Borrar</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
                         </table>                     }
                     else
                     {

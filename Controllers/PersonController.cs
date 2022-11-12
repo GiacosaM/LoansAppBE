@@ -2,6 +2,8 @@
 using BE_LoansApp.DataAccess;
 using BE_LoansApp.DTOs;
 using BE_LoansApp.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,6 +12,8 @@ namespace BE_LoansApp.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PersonController : ControllerBase
     {
         private readonly ThingsContext peoplecontext;
@@ -34,7 +38,7 @@ namespace BE_LoansApp.Controllers
         [HttpGet("{id:int}", Name = "obtenerPerson")]
         public async Task<ActionResult<PersonDTO>> GetById(int id)
         {
-            var person = await peoplecontext.People.FirstOrDefaultAsync(x => x.Id == id); // Incluye los prestamos que tiene la persona.
+            var person = await peoplecontext.People.FirstOrDefaultAsync(x => x.Id == id); 
             
 
             if (person == null)

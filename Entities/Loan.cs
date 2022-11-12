@@ -1,4 +1,6 @@
-﻿namespace BE_LoansApp.Entities
+﻿using BE_LoansApp.Models;
+
+namespace BE_LoansApp.Entities
 {
     public class Loan
     {
