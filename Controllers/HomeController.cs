@@ -32,9 +32,7 @@ namespace BE_LoansApp.Controllers
         [HttpGet]
         public IActionResult Crear()
         {
-            //var category = await _context.Categories.ToListAsync();
-            //return View(mapper.Map<List<CategoryViewModel>>(category));
-            return View();
+            return View("Crear");
         }
 
         
@@ -57,6 +55,28 @@ namespace BE_LoansApp.Controllers
 
             return View(mapper.Map<ThingViewModel>(thing));
         }
+        [HttpPost]
+        public IActionResult EditarRegistro(int? id, string Description) {
+
+            if (!ModelState.IsValid)
+            {
+                return View("Editar");
+            }
+
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            //var thing = _context.Things.FirstOrDefault(x => x.Id == id);
+            var thing = _context.Things
+                        .FirstOrDefault(x => x.Id == id);
+            thing.Description = Description;
+            _context.SaveChanges();
+            TempData["Mensaje"] = "El Objeto se Edito Correctamente";
+            return RedirectToAction("Index");
+        }
+
 
         [HttpGet]
         public IActionResult Borrar(int? id)
@@ -98,38 +118,44 @@ namespace BE_LoansApp.Controllers
 
         [HttpPost]
        
-        public async Task<IActionResult> Crear(ThingViewModelDTO thingVMDTO)
+        public async Task<IActionResult> Crear(string? Description, string? Category)
         {
-            
-
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid || Description is null || Category is null)
             {
+                TempData["Mensaje"] = "No puede Haber campos Vacios";
+                return View("Crear");
+            } 
 
-                var existeCategory = await _context.Categories.AnyAsync(categoryDB => categoryDB.Description == thingVMDTO.Category);
+                var existeCategory = await _context.Categories.AnyAsync(categoryDB => categoryDB.Description == Category);
                 if (!existeCategory)
 
                 {
-                    
-                    var category = mapper.Map<Category>(thingVMDTO);
-                    _context.Categories.Add(category);
-                    await _context.SaveChangesAsync();
-                    
+                    var newCategory = _context.Categories.Add(new Category
+                    {
+                        Description = Category
+                    });
+
+                    _context.SaveChanges();
+                    int idCat = newCategory.Entity.Id;
+
+                    _context.Things.Add(new Thing
+                        {
+                            Description = Description,
+                            CategoryId = idCat,
+                        }
+                    );
+                    await _context.SaveChangesAsync(); 
                 }
                 else {
-                    
-                        //ModelState.AddModelError(String.Empty, "Ya existe una Categoria Que intenta Crear");
-                        //return View("Crear");
+                  
+                     ModelState.AddModelError(String.Empty, "Ya existe una Categoria Que intenta Crear");
+                     return View("Crear");
+                }
 
-                    }       
-
-                
-                
+                TempData["Mensaje"] = "El Objeto Fue creado con Exito";
                 return RedirectToAction("Index");
 
-            }
-
-         return View();
-
+               
         }
         public IActionResult Privacy()
         {

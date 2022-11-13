@@ -6,6 +6,14 @@
 
 <h1 class="text-center"> ABM Cosas - MVC</h1>
 
+@if (TempData["Mensaje"] != null)
+{
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <strong>@TempData["Mensaje"]</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 <div class="row">
     
     <div class="col.sm-12">
@@ -16,6 +24,7 @@
             <div class="card-body">
                 <form asp-Controller= "Home" asp-action="Crear" method="post">
                     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                     <div class="form-group">
                         <label asp-for="Description" class="control-label"></label>
                         <input asp-for="Description" class="form-control"/>

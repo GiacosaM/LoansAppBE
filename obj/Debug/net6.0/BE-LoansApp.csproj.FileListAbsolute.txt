@@ -68,3 +68,8 @@ C:\Users\marti\Desktop\Angular\LoansApp\BE-LoansApp\BE-LoansApp\bin\Debug\net6.0
 C:\Users\marti\Desktop\Angular\LoansApp\BE-LoansApp\BE-LoansApp\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\marti\Desktop\Angular\LoansApp\BE-LoansApp\BE-LoansApp\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\marti\Desktop\Angular\LoansApp\BE-LoansApp\BE-LoansApp\bin\Debug\net6.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\marti\Desktop\Angular\LoansApp\BE-LoansApp\BE-LoansApp\bin\Debug\net6.0\Microsoft.OpenApi.dll
+C:\Users\marti\Desktop\Angular\LoansApp\BE-LoansApp\BE-LoansApp\bin\Debug\net6.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Users\marti\Desktop\Angular\LoansApp\BE-LoansApp\BE-LoansApp\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Users\marti\Desktop\Angular\LoansApp\BE-LoansApp\BE-LoansApp\bin\Debug\net6.0\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\marti\Desktop\Angular\LoansApp\BE-LoansApp\BE-LoansApp\obj\Debug\net6.0\BE-LoansApp.MvcApplicationPartsAssemblyInfo.cs
