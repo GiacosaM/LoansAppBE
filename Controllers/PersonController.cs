@@ -19,7 +19,9 @@ namespace BE_LoansApp.Controllers
         private readonly ThingsContext peoplecontext;
         private readonly IMapper mapper;
 
-        public PersonController(ThingsContext context, IMapper mapper)
+        public PersonController(ThingsContext context, 
+            IMapper mapper)
+            
         {
             peoplecontext = context;
             this.mapper = mapper;
