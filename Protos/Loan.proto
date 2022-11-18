@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option csharp_namespace = "BE_LoansApp.Protos";
+
+
+service LoanService {
+	rpc ReturnLoan (Loan) returns (Mensaje);
+}
+
+message Mensaje{
+	string respuesta = 1;
+}
+
+message Loan {
+	int32 id = 1;
+}
+
+

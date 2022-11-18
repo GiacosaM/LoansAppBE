@@ -30,12 +30,12 @@ namespace BE_LoansApp.Controllers
 
        
         [HttpGet]
-        public IActionResult Crear()
+        public async Task<IActionResult> Crear()
         {
-            return View("Crear");
+            return View();
         }
 
-        
+
         [HttpGet]
         public IActionResult Editar(int? id)
         {
@@ -136,6 +136,7 @@ namespace BE_LoansApp.Controllers
                     });
 
                     _context.SaveChanges();
+
                     int idCat = newCategory.Entity.Id;
 
                     _context.Things.Add(new Thing
@@ -147,9 +148,23 @@ namespace BE_LoansApp.Controllers
                     await _context.SaveChangesAsync(); 
                 }
                 else {
-                  
-                     ModelState.AddModelError(String.Empty, "Ya existe una Categoria Que intenta Crear");
-                     return View("Crear");
+
+
+                var CatId = _context.Categories
+                        .FirstOrDefault(x => x.Description == Category);
+
+                _context.Things.Add(new Thing
+                {
+                    Description = Description,
+                    CategoryId = CatId.Id,
+                }
+                    );
+                await _context.SaveChangesAsync();
+
+
+
+                //ModelState.AddModelError(String.Empty, "Ya existe una Categoria Que intenta Crear");
+                //return View("Crear");
                 }
 
                 TempData["Mensaje"] = "El Objeto Fue creado con Exito";

@@ -2,6 +2,7 @@
 using BE_LoansApp.DataAccess;
 using BE_LoansApp.DTOs;
 using BE_LoansApp.Entities;
+using BE_LoansApp.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.EntityFrameworkCore;
@@ -31,24 +32,30 @@ namespace BE_LoansApp.Controllers
             var loans = await context.Loans
                         .Where(x => x.PersonId == peopleId)
                         .Include(thingDB => thingDB.Thing)
+                        .Include(PersonDB => PersonDB.Person)
                         
                         .ToListAsync();
             return mapper.Map<List<LoanDTO>>(loans);
         }
 
 
-        [HttpPost("{personId:int}/{thingIg:int}/loans")]
-        public async Task<ActionResult> Post(int personId,  int thingId, LoanCreationDTO loanCreationDTO)
+        [HttpPost]
+        public async Task<ActionResult> Post( LoanCreationDTO loanCreationDTO)
         {
-            var ExistePersona = await context.People.AnyAsync(personDB => personDB.Id == personId);
+            var ExistePersona = await context.People.AnyAsync(personDB => personDB.Id == loanCreationDTO.PersonId);
             if (!ExistePersona)
             {
-                return NotFound();
+                return BadRequest($"No existe persona registrada bajo el ID Nro. {loanCreationDTO.PersonId}");
+            }
+
+            var ExisteObjeto = await context.Things.AnyAsync(thingDB => thingDB.Id == loanCreationDTO.ThingId);
+            if (!ExisteObjeto)
+            {
+                return BadRequest($"No existe Objeto registrado bajo el ID Nro. {loanCreationDTO.ThingId}");
             }
 
             var loan = mapper.Map<Loan>(loanCreationDTO);
-            loan.PersonId = personId;
-            loan.ThingId = thingId;
+                     
             context.Add(loan);
             await context.SaveChangesAsync();
             return Ok();

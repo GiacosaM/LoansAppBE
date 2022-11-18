@@ -15,24 +15,29 @@ namespace BE_LoansApp.Controllers
     {
         private readonly ThingsContext thingsContext;
         private readonly IMapper mapper;
+        private readonly ILogger<ThingController> logger;
 
-        public ThingController(ThingsContext context, IMapper mapper) 
+        public ThingController(ThingsContext context, IMapper mapper, ILogger<ThingController> logger) 
         {
             thingsContext = context;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         [HttpGet("getall")]
         public async Task<List<ThingDTO>> GetAll()
         {
+            logger.LogInformation("Obteniendo Listado de Objetos");
             var things = await thingsContext.Things.ToListAsync();
             return mapper.Map<List<ThingDTO>>(things);
+            
 
         }
 
         [HttpGet("{categoryId:int}/things")]
         public async Task<ActionResult<List<ThingDTO>>> Get(int categoryId)
         {
+            logger.LogInformation("Obteniendo Objeto por ID de Categoria");
             var things = await thingsContext.Things
                 .Where(thingDB => thingDB.CategoryId == categoryId).ToListAsync();
             return mapper.Map<List<ThingDTO>>(things);
@@ -44,6 +49,7 @@ namespace BE_LoansApp.Controllers
             var thing = await thingsContext.Things.FirstOrDefaultAsync(thingBD=> thingBD.Id == id);
             if (thing == null)
             {
+                logger.LogWarning($"El Objeto de id { id} NO fue encontrado");
                 return NotFound();
             }
 
@@ -53,9 +59,10 @@ namespace BE_LoansApp.Controllers
         [HttpGet("{description}")]
         public async Task<ActionResult<List<ThingDTO>>> Get([FromRoute] string description)
         {
-            var things = await thingsContext.Things.Where(thingBD => thingBD.Description.Contains(description)).ToListAsync();
+            logger.LogInformation("Obteniendo Listado Por Descripcion");
 
-            
+            var things = await thingsContext.Things.Where(thingBD => thingBD.Description.Contains(description)).ToListAsync();
+                      
             return mapper.Map<List<ThingDTO>>(things);
         }
 
@@ -65,7 +72,9 @@ namespace BE_LoansApp.Controllers
             var existeCategory = await thingsContext.Categories.AnyAsync(categoryDB => categoryDB.Id == categoryId);
             if (!existeCategory)
             {
+                logger.LogWarning($"La categoria con id {categoryId} NO fue encontrada");
                 return NotFound();
+
             }
             var thing = mapper.Map<Thing>(thingDTO);
             thing.CategoryId = categoryId;
@@ -84,12 +93,14 @@ namespace BE_LoansApp.Controllers
             var existeCategory = await thingsContext.Categories.AnyAsync(categoryDB => categoryDB.Id == categoryId);
             if (!existeCategory)
             {
+                logger.LogWarning($"La categoria con id {categoryId} NO fue encontrada");
                 return NotFound();
             }
 
             var existeThing = await thingsContext.Things.AnyAsync(thingDB => thingDB.Id == id);
             if (!existeThing)
             {
+                logger.LogWarning($"El Objeto de id {id} NO fue encontrado");
                 return NotFound();
             }
 
@@ -109,7 +120,8 @@ namespace BE_LoansApp.Controllers
 
                 if (!existe) 
                 {
-                    return NotFound();
+                logger.LogWarning($"El Objeto Que desean borrar, con el de id {id} NO fue encontrado");
+                return NotFound();
                 }
             thingsContext.Remove(new Thing() { Id = id });
             await thingsContext.SaveChangesAsync();

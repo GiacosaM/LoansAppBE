@@ -8,6 +8,11 @@ namespace BE_LoansApp.Entities
 
         public DateTime CreateDate { get; set; } = DateTime.UtcNow;
 
+        public DateTime ReturnDate { get; set; }
+
+        public string Status { get; set; }
+
+
         public int ThingId { get; set; }
         public Thing Thing { get; set; }
 

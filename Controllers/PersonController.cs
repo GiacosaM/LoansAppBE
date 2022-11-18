@@ -18,13 +18,14 @@ namespace BE_LoansApp.Controllers
     {
         private readonly ThingsContext peoplecontext;
         private readonly IMapper mapper;
+        private readonly ILogger<PersonController> logger;
 
-        public PersonController(ThingsContext context, 
-            IMapper mapper)
+        public PersonController(ThingsContext context,IMapper mapper, ILogger<PersonController> logger)
             
         {
             peoplecontext = context;
             this.mapper = mapper;
+            this.logger = logger;
         }
 
         [HttpGet("getall")]
@@ -45,6 +46,7 @@ namespace BE_LoansApp.Controllers
 
             if (person == null)
             {
+                logger.LogWarning($" No se encontro La persona con el id {id}");
                 return NotFound();
             }
 
@@ -52,6 +54,7 @@ namespace BE_LoansApp.Controllers
         }
 
         [HttpPost]
+
         public async Task<ActionResult> Post(PersonCreationDTO personCreationDTO)
         {
             var person = mapper.Map<Person>(personCreationDTO);
@@ -59,6 +62,7 @@ namespace BE_LoansApp.Controllers
             await peoplecontext.SaveChangesAsync();
 
             var personDTO = mapper.Map<PersonDTO>(person);
+            logger.LogInformation(" Se creo un nuevo registro de Persona");
             return CreatedAtRoute("obtenerPerson", new { id = person.Id }, personDTO);
 
         }
@@ -69,12 +73,13 @@ namespace BE_LoansApp.Controllers
             var existePersona = await peoplecontext.People.AnyAsync(x => x.Id == id);
             if (!existePersona)
             {
+                logger.LogWarning($" NO existe la persona con el id {id}, que se desea modificar");
                 return NotFound();
             }
 
             var people = mapper.Map<Person>(personCreationDTO);
             people.Id = id;
-
+            logger.LogInformation($" Se modifico el registro de la Persona con el id {id}");
             peoplecontext.Update(people);
             await peoplecontext.SaveChangesAsync();
             return NoContent();
@@ -89,10 +94,12 @@ namespace BE_LoansApp.Controllers
 
             if (!existe)
             {
+                logger.LogWarning($" NO existe la persona con el id {id}, que se desea Eliminar");
                 return NotFound();
             }
             peoplecontext.Remove(new Person() { Id = id });
             await peoplecontext.SaveChangesAsync();
+            logger.LogInformation($" Se Elimino el registro de la Persona con el id {id}");
             return NoContent();
 
         }

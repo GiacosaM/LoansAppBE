@@ -1,4 +1,5 @@
 using BE_LoansApp.DataAccess;
+using BE_LoansApp.Protos;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -12,6 +13,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
+//Add gRPC
+builder.Services.AddGrpc();
+builder.Services.AddGrpcReflection();
 
 
 // Add Swagger
@@ -44,6 +49,8 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 });
+
+
 
 
 
@@ -100,20 +107,19 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+
+    app.MapGrpcReflectionService();
 }
 
 app.UseCors("AllowWebapp");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
 app.UseAuthorization();
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
+app.MapGrpcService<LoanHandler>();
 
 app.Run();

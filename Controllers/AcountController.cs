@@ -15,14 +15,17 @@ namespace BE_LoansApp.Controllers
         private readonly UserManager<IdentityUser> userManager;
         private readonly IConfiguration configuration;
         private readonly SignInManager<IdentityUser> signinManager;
+        private readonly ILogger<AcountController> logger;
 
         public AcountController(UserManager<IdentityUser> userManager,
             IConfiguration configuration, 
-            SignInManager<IdentityUser> signinManager)
+            SignInManager<IdentityUser> signinManager,
+            ILogger<AcountController>logger)
         {
             this.userManager = userManager;
             this.configuration = configuration;
             this.signinManager = signinManager;
+            this.logger = logger;
         }
 
         [HttpPost("registrar")] // api/acounts/registrar
@@ -37,10 +40,12 @@ namespace BE_LoansApp.Controllers
 
             if (resultado.Succeeded)
             {
+                
                 return ConstruirToken(credencialesUsuario);
             }
             else
             {
+                
                 return BadRequest(resultado.Errors);
             }
 
@@ -54,12 +59,13 @@ namespace BE_LoansApp.Controllers
 
             if (resultado.Succeeded)
             {
+                logger.LogInformation($"El usuario {credencialesUsuario.Email} ingreso al sistema correctamente");
                 return ConstruirToken(credencialesUsuario);
                 
             }
             else
             {
-
+                logger.LogInformation($"El usuario {credencialesUsuario.Email} No ha validado sus credenciales correctamente");
                 return BadRequest("Login Incorrecto");
             }
         }

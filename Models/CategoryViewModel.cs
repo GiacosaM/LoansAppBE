@@ -6,8 +6,9 @@ namespace BE_LoansApp.Models
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = " Debe ingresar una categoria")]
+        [Required(ErrorMessage = "Debe ingresar una categoria")]
         [Display(Name = "Description")]
         public string Description { get; set; }
+
     }
 }

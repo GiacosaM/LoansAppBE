@@ -6,7 +6,7 @@ namespace BE_LoansApp.DTOs
     {
         public int Id { get; set; }
 
-        public DateTime CreateDate { get; set; }
+       // public DateTime CreateDate { get; set; }
 
         public ThingDTO Thing { get; set; }
 
